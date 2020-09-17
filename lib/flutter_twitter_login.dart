@@ -6,8 +6,7 @@ import 'package:flutter/services.dart';
 /// A Flutter plugin for authenticating users by using the native Twitter
 /// login SDKs on Android & iOS.
 class TwitterLogin {
-  static const MethodChannel channel =
-      const MethodChannel('com.roughike/flutter_twitter_login');
+  static const MethodChannel channel = const MethodChannel('com.roughike/flutter_twitter_login');
 
   /// Creates a new Twitter login instance, with the specified key and secret.
   ///
@@ -17,11 +16,8 @@ class TwitterLogin {
   TwitterLogin({
     @required this.consumerKey,
     @required this.consumerSecret,
-  })
-      : assert(consumerKey != null && consumerKey.isNotEmpty,
-            'Consumer key may not be null or empty.'),
-        assert(consumerSecret != null && consumerSecret.isNotEmpty,
-            'Consumer secret may not be null or empty.'),
+  })  : assert(consumerKey != null && consumerKey.isNotEmpty, 'Consumer key may not be null or empty.'),
+        assert(consumerSecret != null && consumerSecret.isNotEmpty, 'Consumer secret may not be null or empty.'),
         _keys = {
           'consumerKey': consumerKey,
           'consumerSecret': consumerSecret,
@@ -55,8 +51,7 @@ class TwitterLogin {
   ///
   /// If the user is not logged in, this returns null.
   Future<TwitterSession> get currentSession async {
-    final Map<dynamic, dynamic> session =
-        await channel.invokeMethod('getCurrentSession', _keys);
+    final Map<dynamic, dynamic> session = await channel.invokeMethod('getCurrentSession', _keys);
 
     if (session == null) {
       return null;
@@ -101,8 +96,7 @@ class TwitterLogin {
   ///
   /// See the [TwitterLoginResult] class for more documentation.
   Future<TwitterLoginResult> authorize() async {
-    final Map<dynamic, dynamic> result =
-        await channel.invokeMethod('authorize', _keys);
+    final Map<dynamic, dynamic> result = await channel.invokeMethod('authorize', _keys);
 
     return new TwitterLoginResult._(result.cast<String, dynamic>());
   }
@@ -148,8 +142,7 @@ class TwitterLoginResult {
         return TwitterLoginStatus.loggedIn;
       case 'error':
         // Kind of a hack, but the only way of determining this.
-        if (errorMessage.contains('canceled') ||
-            errorMessage.contains('cancelled')) {
+        if (errorMessage.contains('canceled') || errorMessage.contains('cancelled')) {
           return TwitterLoginStatus.cancelledByUser;
         }
 
@@ -226,6 +219,5 @@ class TwitterSession {
           username == other.username;
 
   @override
-  int get hashCode =>
-      secret.hashCode ^ token.hashCode ^ userId.hashCode ^ username.hashCode;
+  int get hashCode => secret.hashCode ^ token.hashCode ^ userId.hashCode ^ username.hashCode;
 }
